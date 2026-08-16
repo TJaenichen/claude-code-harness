@@ -1,0 +1,49 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pwsh -NoProfile -Command \"$j=[Console]::In.ReadToEnd(); & \\\"$env:USERPROFILE\\.claude\\hooks\\load-context.ps1\\\" -InputJson $j\""
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"$USERPROFILE/.claude/hooks/kiss.py\""
+          },
+          {
+            "type": "command",
+            "command": "pwsh -NoProfile -Command \"[Console]::In.ReadToEnd() | pwsh -NoProfile -File \\\"$env:USERPROFILE\\.claude\\hooks\\track-session.ps1\\\"\""
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pwsh -NoProfile -Command \"[Console]::In.ReadToEnd() | pwsh -NoProfile -File \\\"$env:USERPROFILE\\.claude\\hooks\\track-session.ps1\\\"\""
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pwsh -NoProfile -Command \"[Console]::In.ReadToEnd() | pwsh -NoProfile -File \\\"$env:USERPROFILE\\.claude\\hooks\\track-tooluse.ps1\\\"\""
+          }
+        ]
+      }
+    ]
+  }
+}
